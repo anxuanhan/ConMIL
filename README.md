@@ -88,13 +88,6 @@ This step performs:
 - optional Macenko stain normalization
 - feature extraction using the CONCH vision encoder
 
-Key arguments:
-- `-patch_size`: patch size used for feature extraction
-- `-read_size`: image region size read from the slide before resizing
-- `-level`: WSI pyramid level used for patch extraction
-- `-m macenko`: apply Macenko stain normalization
-- `--batch_size`: inference batch size
-- `-blank_threshold`: threshold for filtering background patches
 
 Example:
 
@@ -134,13 +127,7 @@ After encoding the text prompts, you can retrieve the top-ranked patches based o
 
 If the retrieved patches do not match the expected pathological patterns, you can revise `POS_QUERIES` and `NEG_QUERIES` in `encode_text_queries.py`, then re-run the text encoding and patch retrieval steps.
 
-Key arguments:
-- `--text_feature_dir`: directory containing encoded text features
-- `--h5_dir`: directory containing extracted WSI features
-- `--topk`: number of top-ranked patches to retrieve for each slide
-- `--neg_weight`: weighting factor for negative prompt similarity
-- `--mode`: retrieval mode, such as positive-only or combined positive-negative scoring
-- `--sharpness_thresh`: threshold for filtering blurry patches
+
 
 Example:
 
@@ -157,10 +144,6 @@ python retrieve_patches.py \
 
 This step trains the ConMIL framework using extracted WSI features and encoded pathological text embeddings.
 
-Key arguments:
-- `--use_neg`: whether to use negative prompts for contrastive semantic scoring
-- `--neg_weight`: weighting factor for negative prompt similarity
-- `--kan_grid`: grid size used in the KAN classifier
 
 Pretrained ConMIL checkpoints are also available on [Hugging Face](https://huggingface.co/ananananxuan/ConMIL/tree/main).
 
@@ -188,11 +171,6 @@ These visualizations can be used to:
 - compare attention patterns across different prompts or models
 - support qualitative interpretation of weakly supervised learning behavior
 
-Key arguments:
-
-- `--h5`: extracted WSI feature file
-- `--ckpt`: trained ConMIL checkpoint
-- `--text_feat_dir`: directory containing encoded text embeddings
 
 Example:
 
