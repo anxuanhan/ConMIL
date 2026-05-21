@@ -1,6 +1,8 @@
-# ConMIL (Text-Guided MIL)
+# ConMIL: interactive and contrastive text-guided multiple instance learning for whole slide image classification
+<img width="1565" height="784" alt="image" src="https://github.com/user-attachments/assets/101bef46-c243-4336-af91-1eabe7586d18" />
 
-This repo contains a dataset-agnostic pipeline for text-guided multiple instance learning (MIL) on WSI data with a KAN classifier head. It uses CONCH ViT-B-16 for patch feature extraction and prompt encoding.
+
+
 
 ## ✅ Requirements
 - Python 3.8+
@@ -11,18 +13,46 @@ This repo contains a dataset-agnostic pipeline for text-guided multiple instance
 - opencv-python, pillow, matplotlib, tifffile
 - Optional normalization: wsi-normalizer and/or torchstain
 
-## 📂 Data format
-- Slides folder contains WSI files (.svs, .tif, .ndpi).
-- Label CSV must contain:
-  - image: filename of the slide (e.g., tumor_005.tif)
-  - type: class label string, expected values: tumor or normal
+## 📂 Data Format
 
-Example labels.csv:
-```
+## 📁 Slides Folder
+The slides folder should contain WSI files `.svs` `.tif` `.ndpi`
+
+### CAMELYON16
+For CAMELYON16, the official dataset already provides a reference file, `reference.csv`, which can be directly used as the label CSV.
+
+The CSV file should contain:
+
+```csv
 image,type
 tumor_001.tif,tumor
-normal_003.tif,normal
+tumor_002.tif,tumor
+normal_001.tif,normal
+normal_002.tif,normal
 ```
+
+Here, `image` refers to the slide filename, and `type` refers to the slide-level class label.
+
+### TCGA-BRCA
+For TCGA-BRCA, users need to manually organize the labels into a CSV file.
+
+The label CSV should contain:
+- `patient`: patient or slide identifier
+- `type`: subtype label (e.g., `IDC` or `ILC`)
+
+Example `labels.csv`:
+
+```csv
+patient,type
+TCGA-3C-AALI,IDC
+TCGA-3C-AALJ,IDC
+TCGA-3C-AALK,IDC
+TCGA-3C-AALM,ILC
+```
+
+The identifiers in the CSV file should match the slide filenames or patient IDs used in the dataset.
+
+
 
 ## 🚀 How to run
 Set your paths and run step by step.
@@ -115,11 +145,3 @@ python kan_interpretability.py \
 ## 📝 Text prompts
 Edit POS_QUERIES and NEG_QUERIES in encode_text_queries.py to match your dataset domain.
 
-## ⚠️ Notes / known gaps
-The following files are referenced but not present in this folder and must be added if needed:
-- text_guided_mil_kan.py (model builder imported by train_text_guided_mil_kan.py)
-- text_guided_mil.py and train_text_guided_mil.py (baseline non-KAN training)
-- visualize_attention_heatmap.py (older heatmap script, optional)
-- Preprocessing/process_mark.py (if you want advanced tissue mask processing)
-
-If these files already exist in other folders, copy them into this repo to make it self-contained.
