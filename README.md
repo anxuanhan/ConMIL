@@ -65,11 +65,11 @@ For TCGA-BRCA, tissue masks need to be generated before feature extraction. Run:
 
 ```bash
 python Preprocessing/process_mark.py \
-  -pic_path "HE_slides_raw" \
+  -pic_path "data/slides" \
   -file_type svs \
   -min_area 1000000 \
   -min_hole 100000 \
-  -out_dir "Process_pics" \
+  -out_dir "data/background_masks" \
   -red_dilate_iterations 1 \
   -blue_dilate_iterations 3 \
   -green_dilate_iterations 8 \
@@ -92,19 +92,20 @@ This step performs:
 Example:
 
 ```bash
-python cut_norm_feature_copy.py \
- -input_folder /path/to/slides \
- -mask_folder /path/to/masks \
- -output_folder /path/to/features_conch \
- -patch_size 224 \
- -read_size 256 \
- -level 1 \
- -file_type svs \
- -m macenko \
- --batch_size 128 \
- --checkpoint_path /path/to/CONCH/pytorch_model.bin \
- --num_workers 8 \
- -blank_threshold 0.6
+python cut_norm_feature.py \
+  -input_folder "data/slides" \
+  -mask_folder "data/background_masks" \
+  -output_folder "features/features_conch" \
+  -patch_size 224 \
+  -read_size 256 \
+  -level 1 \
+  -file_type svs \
+  -r "examples/reference_patch.png" \
+  -m macenko \
+  --batch_size 128 \
+  --checkpoint_path "checkpoints/conch/pytorch_model.bin" \
+  --num_workers 8 \
+  -blank_threshold 0.6
 ```
 
 ### 3) Encode text prompts
@@ -117,8 +118,8 @@ Example:
 
 ```bash
 python encode_text_queries.py \
-  --checkpoint_path /path/to/CONCH/pytorch_model.bin \
-  --output_dir /path/to/text_features
+  --checkpoint_path "checkpoints/conch/pytorch_model.bin" \
+  --output_dir "text_features"
 ```
 
 ### 4) Patch retrieval for prompt checking
@@ -133,12 +134,19 @@ Example:
 
 ```bash
 python retrieve_patches.py \
-  --text_feature_dir /path/to/text_features \
-  --h5_dir /path/to/features_conch \
-  --output_dir /path/to/retrieval_results \
-  --slide_folder /path/to/slides
+  --text_feature_dir "text_features" \
+  --h5_dir "features/features_conch" \
+  --output_dir "retrieval_results" \
+  --slide_folder "data/slides" \
+  --file_type svs \
+  --level 1 \
+  --read_size 256 \
+  --topk 20 \
+  --neg_weight 0.5 \
+  --mode pos \   
+  --sharpness_thresh 100
 ```
-
+Available retrieval modes: pos / neg / combined
 
 ### 5) Train Text-Guided MIL (KAN head)
 
@@ -151,14 +159,15 @@ Example:
 
 ```bash
 python train_text_guided_mil_kan.py \
-    --feat_dir "$FEAT_DIR" \
-    --label_csv "$LABEL_CSV" \
-    --text_feat_dir "$TEXT_FEAT_DIR" \
-    --use_neg true \
-    --neg_weight 0.5 \
-    --kan_grid 6 \
-    --epochs 20 \
-    --output "$OUTPUT_DIR"
+  --feat_dir "features/features_conch" \
+  --label_csv "evaluation/reference.csv" \
+  --text_feat_dir "text_features" \
+  --use_neg true \
+  --neg_weight 0.5 \
+  --kan_grid 6 \
+  --epochs 20 \
+  --output "results"
+
 ```
 
 
@@ -175,14 +184,18 @@ These visualizations can be used to:
 Example:
 
 ```bash
-python visualize_attention_heatmap_v2.py \
-  --slide /path/to/slides/example.svs \
-  --mask /path/to/masks/example_mask.tif \
-  --h5 /path/to/features_conch/example.h5 \
-  --ckpt /path/to/results/textguided_kan6_posneg_best.pt \
-  --text_feat_dir /path/to/text_features \
-  --output /path/to/attention_map/example_heatmap_v2.png
+python visualize_attention_heatmap.py \
+  --slide "data/slides/example.svs" \
+  --mask "data/masks/example_mask.tif" \
+  --h5 "features/features_conch/example.h5" \
+  --ckpt "results/textguided_posneg_best.pt" \
+  --text_feat_dir "text_features" \
+  --output "attention_maps/example_heatmap.png" \
+  --low_pct 1 \
+  --high_pct 99 \
+  --gamma 0.5
 ```
+
 
 ### 7) KAN interpretability analysis (optional)
 
@@ -198,12 +211,10 @@ Example:
 
 ```bash
 python kan_interpretability.py \
-  --ckpt /path/to/results/textguided_kan6_posneg_best.pt \
-  --feat_dir /path/to/features_conch \
-  --label_csv /path/to/labels.csv \
-  --text_feat_dir /path/to/text_features \
-  --output /path/to/kan_analysis
+  --ckpt "results/textguided_posneg_best.pt" \
+  --feat_dir "features/features_conch" \
+  --label_csv "evaluation/reference.csv" \
+  --text_feat_dir "text_features" \
+  --output "kan_analysis"
 ```
-## 📝 Text prompts
-Edit POS_QUERIES and NEG_QUERIES in encode_text_queries.py to match your dataset domain.
 
