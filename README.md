@@ -36,19 +36,12 @@ For CAMELYON16, tissue masks are already available from the dataset, so this pre
 For TCGA-BRCA, tissue masks need to be generated before feature extraction. Run:
 
 ```bash
-python Preprocessing/process_mark.py \
+python process.py \
   -pic_path "data/slides" \
+  -out_dir "data/background_masks" \
   -file_type svs \
   -min_area 1000000 \
-  -min_hole 100000 \
-  -out_dir "data/background_masks" \
-  -red_dilate_iterations 1 \
-  -blue_dilate_iterations 3 \
-  -green_dilate_iterations 8 \
-  -black_kernel_size 8 \
-  -black_close_iterations 12 \
-  -black_dilate_iterations 10 \
-  -overwrite
+  -min_hole 100000
 ```
 
 ### 2) Feature extraction with CONCH
