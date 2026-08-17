@@ -5,13 +5,15 @@
 
 
 ## ✅ Requirements
-- Python 3.8+
-- PyTorch + torchvision
-- CONCH codebase (conch.open_clip_custom)
-- openslide-python + OpenSlide system libs
-- h5py, numpy, pandas, scikit-learn
-- opencv-python, pillow, matplotlib, tifffile
-- Optional normalization: wsi-normalizer and/or torchstain
+- Python == 3.10.16
+- PyTorch == 1.13.1+cu116
+- torchvision == 0.14.1+cu116
+- NumPy == 1.26.4
+- pandas == 2.2.2
+- scikit-learn == 1.4.2
+- h5py == 3.11.0
+
+For the complete list of dependencies and package versions, please refer to `requirements.txt`.
 
 ## 📂 Data Format
 
