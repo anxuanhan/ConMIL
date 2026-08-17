@@ -27,16 +27,14 @@ For CAMELYON16, the official `reference.csv` can be directly used.
 
 
 ## 🚀 How to run
-Set your paths and run step by step.
+
 
 ### 1) Tissue mask generation or mask preparation
 
-For CAMELYON16, tissue masks are already available from the dataset, so this preprocessing step can be skipped. You can directly use the provided masks for feature extraction.
-
-For TCGA-BRCA, tissue masks need to be generated before feature extraction. Run:
+Generate tissue masks before feature extraction:
 
 ```bash
-python process.py \
+python process_mark.py \
   -pic_path "data/slides" \
   -out_dir "data/background_masks" \
   -file_type svs \
@@ -84,8 +82,7 @@ For example, the figure below shows an example interaction with ChatGPT for gene
 <img width="819" height="494" alt="image" src="https://github.com/user-attachments/assets/43f18c8e-7f2a-4a88-8b15-7ebb4d35c037" />
 
 
-Example:
-
+Then run: 
 ```bash
 python encode_text_queries.py \
   --checkpoint_path "checkpoints/conch/pytorch_model.bin" \
