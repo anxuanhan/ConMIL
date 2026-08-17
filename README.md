@@ -23,7 +23,11 @@ The label CSV should contain the slide/patient identifier and the corresponding 
 
 For CAMELYON16, the official `reference.csv` can be directly used.
 
+### Dataset splits
 
+- **CAMELYON16:** the official train/test split was used. The training set was further divided into training and validation subsets using stratified sampling with a validation ratio of 0.2.
+- **TCGA-BRCA:** a stratified 10% hold-out set was reserved for independent testing, while the remaining slides were used for five-fold stratified train-validation splitting.
+- **BRACS:** the official predefined training, validation, and test splits were used.
 
 
 ## 🚀 How to run
