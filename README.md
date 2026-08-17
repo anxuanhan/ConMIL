@@ -42,9 +42,9 @@ python process_mark.py \
   -min_hole 100000
 ```
 
-### 2) Feature extraction with CONCH
+### 2) Feature extraction with CONCH/PLIP
 
-Download the CONCH checkpoint from the official [CONCH GitHub repository](https://github.com/mahmoodlab/CONCH) and specify the checkpoint path in the command below.
+Download the CONCH checkpoint from the official [CONCH GitHub repository](https://github.com/mahmoodlab/CONCH) or download the PLIP checkpoint from the official [PLIP GitHub repository](https://github.com/PathologyFoundation/plip) and specify the checkpoint path in the command below.
 
 This step performs:
 - tissue patch extraction from WSIs
@@ -81,13 +81,13 @@ For example, the figure below shows an example interaction with ChatGPT for gene
 
 <img width="819" height="494" alt="image" src="https://github.com/user-attachments/assets/43f18c8e-7f2a-4a88-8b15-7ebb4d35c037" />
 
-
 Then run: 
 ```bash
 python encode_text_queries.py \
   --checkpoint_path "checkpoints/conch/pytorch_model.bin" \
   --output_dir "text_features"
 ```
+
 
 ### 4) Patch retrieval for prompt checking
 
@@ -114,6 +114,9 @@ python retrieve_patches.py \
   --sharpness_thresh 100
 ```
 Available retrieval modes: pos / neg / combined
+
+The generated prompts can be iteratively reviewed and refined through patch retrieval on the training set. For each prompt, the top 20 most similar patches are retrieved for visual inspection. Prompt refinement is stopped when all top-20 retrieved patches are consistent with the pathological characteristics described by the corresponding prompt.
+
 
 ### 5) Train Text-Guided MIL (KAN head)
 
