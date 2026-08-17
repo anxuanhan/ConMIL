@@ -84,7 +84,12 @@ python cut_norm_feature.py \
 
 Before running this step, edit `POS_QUERIES` and `NEG_QUERIES` in `encode_text_queries.py` to match the pathological characteristics of your dataset and classification task.
 
-This step encodes the pathological text prompts into text embeddings using the CONCH text encoder. These text features are later used for contrastive semantic similarity computation during text-guided MIL training and patch retrieval.
+The prompts can be provided by pathology experts or generated with the assistance of a large language model (LLM), such as ChatGPT. When using an LLM, we recommend specifying the classification task and requesting discriminative patch-level pathological features for both positive and negative classes.
+
+For example, the figure below shows an example interaction with ChatGPT for generating positive and negative pathological prompts for CAMELYON16:
+
+<img width="819" height="494" alt="image" src="https://github.com/user-attachments/assets/43f18c8e-7f2a-4a88-8b15-7ebb4d35c037" />
+
 
 Example:
 
