@@ -17,42 +17,12 @@ For the complete list of dependencies and package versions, please refer to `req
 
 ## 📂 Data Format
 
-## 📁 Slides Folder
-The slides folder should contain WSI files `.svs` `.tif` `.ndpi`
+The slides folder should contain WSI files (e.g., `.svs`, `.tif`, `.ndpi`).
 
-### CAMELYON16
-For CAMELYON16, the official dataset already provides a reference file, `reference.csv`, which can be directly used as the label CSV.
+The label CSV should contain the slide/patient identifier and the corresponding class label.
 
-The CSV file should contain:
+For CAMELYON16, the official `reference.csv` can be directly used.
 
-```csv
-image,type
-tumor_001.tif,tumor
-tumor_002.tif,tumor
-normal_001.tif,normal
-normal_002.tif,normal
-```
-
-Here, `image` refers to the slide filename, and `type` refers to the slide-level class label.
-
-### TCGA-BRCA
-For TCGA-BRCA, users need to manually organize the labels into a CSV file.
-
-The label CSV should contain:
-- `patient`: patient or slide identifier
-- `type`: subtype label (e.g., `IDC` or `ILC`)
-
-Example `labels.csv`:
-
-```csv
-patient,type
-TCGA-3C-AALI,IDC
-TCGA-3C-AALJ,IDC
-TCGA-3C-AALK,IDC
-TCGA-3C-AALM,ILC
-```
-
-The identifiers in the CSV file should match the slide filenames or patient IDs used in the dataset.
 
 
 
